@@ -1,0 +1,15 @@
+# Lib services required in development and production env
+version: "3.9"
+services:
+  redis:
+    image: redis:6.2-alpine
+    container_name: harness_redis
+    restart: always
+    ports:
+      - '6379:6379'
+  nginx:
+    image: ghcr.io/harness-iot/nginx:latest
+    container_name: harness_nginx
+    restart: always
+    ports:
+      - 80:80
