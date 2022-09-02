@@ -4,33 +4,44 @@ PORT=$1
 INSTALL_TYPE=$2
 
 echo "Installing required packages. This could take a while.."
-# sudo apt-get update > /dev/null && \
-# sudo apt-get upgrade -y -qq 1> /dev/null || exit 1
+sudo apt-get update > /dev/null && \
+sudo apt-get upgrade -y -qq 1> /dev/null || exit 1
 
-# sudo apt-get install -y -qq docker docker-compose
+sudo apt-get install -y -qq docker docker-compose
 
-# if [ $INSTALL_TYPE = "development" ]; then
-#     echo "Install extra packages for development"
+if [ $INSTALL_TYPE = "development" ]; then
+    echo "Install extra packages for development"
 
-#     sudo apt-get --with-new-pkgs upgrade -y -qq 1> /dev/null && \
-#         sudo aptitude full-upgrade -y -qq 1> /dev/null && \
-#         sudo add-apt-repository ppa:deadsnakes/ppa -y -qq 1> /dev/null && \
-#         sudo apt-get update && \
-#         || exit 1
+    sudo apt-get --with-new-pkgs upgrade -y -qq 1> /dev/null && \
+        sudo aptitude full-upgrade -y -qq 1> /dev/null && \
+        sudo add-apt-repository ppa:deadsnakes/ppa -y -qq 1> /dev/null && \
+        sudo apt-get update && \
+        || exit 1
 
-#     curl -sL https://deb.nodesource.com/setup_17.x | sudo -E bash 1> /dev/null || exit 1
-#     sudo apt-get install -y -qq software-properties-common \ 
-#         bluetooth \
-#         bluez \
-#         libbluetooth-dev \
-#         libudev-dev \
-#         libusb-1.0-0-dev \
-#         nodejs \
-#         sqlite3 \
-#         build-essential \
-#         python3.8 \
-#         python3-pip \
-# fi
+    curl -sL https://deb.nodesource.com/setup_17.x | sudo -E bash 1> /dev/null || exit 1
+    sudo apt-get install -y -qq software-properties-common \ 
+        bluetooth \
+        bluez \
+        libbluetooth-dev \
+        libudev-dev \
+        libusb-1.0-0-dev \
+        nodejs \
+        sqlite3 \
+        build-essential \
+        python3.8 \
+        python3-pip \
+
+    # Set NPM global path
+    mkdir ~/.npm-global
+    npm config set prefix '~/.npm-global'
+    echo "export PATH=~/.npm-global/bin:$PATH" >> ~/.profile
+    source ~/.profile
+
+    # Required for Bleno
+    sudo npm install -g node-gyp
+    sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+    sudo service bluetooth stop
+fi
 
 echo "Setting service and config files"
 sudo cp "$HOME/install/ports/$PORT/harness-boot.sh" /usr/local/bin/
