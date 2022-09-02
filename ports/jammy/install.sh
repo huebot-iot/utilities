@@ -12,14 +12,13 @@ sudo apt-get install -y -qq docker docker-compose
 if [ $INSTALL_TYPE = "development" ]; then
     echo "Install extra packages for development"
 
-    sudo apt-get --with-new-pkgs upgrade -y -qq 1> /dev/null && \
-        sudo aptitude full-upgrade -y -qq 1> /dev/null && \
-        sudo add-apt-repository ppa:deadsnakes/ppa -y -qq 1> /dev/null && \
-        sudo apt-get update && \
-        || exit 1
+    sudo apt-get --with-new-pkgs upgrade -y -qq && \
+        sudo apt-get full-upgrade -y && \
+        sudo add-apt-repository ppa:deadsnakes/ppa -y && \
+        sudo apt-get update
 
-    curl -sL https://deb.nodesource.com/setup_17.x | sudo -E bash 1> /dev/null || exit 1
-    sudo apt-get install -y -qq software-properties-common \ 
+    curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash || exit 1
+    sudo apt-get install -y -qq software-properties-common \
         bluetooth \
         bluez \
         libbluetooth-dev \
@@ -29,7 +28,7 @@ if [ $INSTALL_TYPE = "development" ]; then
         sqlite3 \
         build-essential \
         python3.8 \
-        python3-pip \
+        python3-pip
 
     # Set NPM global path
     mkdir ~/.npm-global
