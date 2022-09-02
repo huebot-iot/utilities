@@ -1,1 +1,1 @@
-HARNESS_ENV="development"
+HARNESS_ENV="production"

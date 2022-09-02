@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# development | production (defaults to production)
+INSTALL_TYPE=${1:-production}
+
 PORT=$(cat /etc/os-release | grep -oP '(^|[ ,])VERSION_CODENAME=\K[^,]*')
 
 if [ -z "$PORT" ]; then
@@ -6,6 +10,18 @@ if [ -z "$PORT" ]; then
     exit 1;
 fi
 
-# Check if install repo exists locally
+# Clone repo if it doesn't exist locally or pull to update
+git clone https://github.com/harness-iot/install.git 2> /dev/null || git -C install pull
 
-echo "CONTINUE!"
+DIR="$HOME/install/ports/$PORT"
+
+if [ ! -d $DIR ]; then
+  echo "Install failed. OS version ($PORT) not supported"
+  exit 1;
+fi
+
+echo "OS ($PORT) verified. Starting $INSTALL_TYPE install..."
+
+# Run version-specific script
+bash "$DIR/install.sh" $PORT $INSTALL_TYPE
+
