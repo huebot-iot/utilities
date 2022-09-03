@@ -4,8 +4,7 @@ PORT=$1
 INSTALL_TYPE=$2
 
 echo "Installing required packages. This could take a while.."
-sudo apt-get update > /dev/null && \
-sudo apt-get upgrade -y -qq 1> /dev/null || exit 1
+sudo apt-get update && sudo apt-get upgrade -y
 
 sudo apt-get install -y -qq docker docker-compose
 
