@@ -7,6 +7,9 @@ echo "Installing required packages. This could take a while.."
 sudo apt-get update && sudo apt-get -y upgrade
 
 sudo apt-get install -y docker docker-compose
+# Allow use of docker without sudo
+sudo usermod -aG docker ${USER}
+su - ${USER}
 
 if [ $INSTALL_TYPE = "development" ]; then
     echo "Install extra packages for development"
