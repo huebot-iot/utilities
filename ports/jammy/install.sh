@@ -4,20 +4,20 @@ PORT=$1
 INSTALL_TYPE=$2
 
 echo "Installing required packages. This could take a while.."
-sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get update && sudo apt-get -y upgrade
 
-sudo apt-get install -y -qq docker docker-compose
+sudo apt-get install -y docker docker-compose
 
 if [ $INSTALL_TYPE = "development" ]; then
     echo "Install extra packages for development"
 
-    sudo apt-get --with-new-pkgs upgrade -y -qq && \
+    sudo apt-get --with-new-pkgs upgrade -y && \
         sudo apt-get full-upgrade -y && \
         sudo add-apt-repository ppa:deadsnakes/ppa -y && \
         sudo apt-get update
 
-    curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash || exit 1
-    sudo apt-get install -y -qq software-properties-common \
+    curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash
+    sudo apt-get install -yq software-properties-common \
         bluetooth \
         bluez \
         libbluetooth-dev \
