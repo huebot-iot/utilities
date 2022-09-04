@@ -6,6 +6,9 @@ INSTALL_TYPE=$2
 echo "Installing required packages. This could take a while.."
 sudo apt-get update && sudo apt-get -y upgrade
 
+# Allow '.local' access
+sudo apt install -y libnss-mdns
+
 sudo apt-get install -y docker docker-compose
 # Allow use of docker without sudo
 sudo usermod -aG docker ${USER}
