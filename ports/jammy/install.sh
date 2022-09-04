@@ -42,6 +42,7 @@ if [ $INSTALL_TYPE = "development" ]; then
     sudo npm install -g node-gyp
     sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
     sudo service bluetooth stop
+    sudo systemctl disable bluetooth
 fi
 
 echo "Setting service and config files"
