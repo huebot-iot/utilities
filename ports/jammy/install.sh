@@ -3,6 +3,9 @@
 PORT=$1
 INSTALL_TYPE=$2
 
+# Disable interactive prompts
+sudo sed -i "/^#$nrconf{restart} = 'i';/ $nrconf{restart} = 'a';" /etc/needrestart/needrestart.conf;
+
 echo "Installing required packages. This could take a while.."
 sudo apt-get update && sudo apt-get -y upgrade
 
