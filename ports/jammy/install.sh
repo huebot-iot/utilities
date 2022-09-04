@@ -14,8 +14,7 @@ sudo apt install -y libnss-mdns
 
 sudo apt-get install -y docker docker-compose
 # Allow use of docker without sudo
-sudo usermod -aG docker ${USER}
-su - ${USER}
+sudo usermod -aG docker harness
 
 if [ $INSTALL_TYPE = "development" ]; then
     echo "Install extra packages for development"
@@ -52,9 +51,9 @@ if [ $INSTALL_TYPE = "development" ]; then
 fi
 
 echo "Setting service and config files"
-sudo cp "$HOME/install/ports/$PORT/harness-boot.sh" /usr/local/bin/
-sudo cp "$HOME/install/ports/$PORT/harness_env_vars" /usr/local/bin/
-sudo cp "$HOME/install/ports/$PORT/harness-boot.service" /etc/systemd/system/
+sudo cp "/home/harness/install/ports/$PORT/harness-boot.sh" /usr/local/bin/
+sudo cp "/home/harness/install/ports/$PORT/harness_env_vars" /usr/local/bin/
+sudo cp "/home/harness/install/ports/$PORT/harness-boot.service" /etc/systemd/system/
 # Set system environment
 sudo sed -ir "s/^[#]*\s*HARNESS_ENV=.*/HARNESS_ENV=$INSTALL_TYPE/" /usr/local/bin/harness_env_vars
 sudo systemctl daemon-reload
