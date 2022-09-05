@@ -1,7 +1,8 @@
 #!/bin/bash
 
-PORT=$1
-INSTALL_TYPE=$2
+API_KEY=$1
+PORT=$2
+INSTALL_TYPE=$3
 
 # Disable interactive prompts
 sudo sed -i "/^#\$nrconf{restart} = 'i';/ c\$nrconf{restart} = 'a';" /etc/needrestart/needrestart.conf;
@@ -9,10 +10,10 @@ sudo sed -i "/^#\$nrconf{restart} = 'i';/ c\$nrconf{restart} = 'a';" /etc/needre
 echo "Installing required packages. This could take a while.."
 sudo apt-get update && sudo apt-get -y upgrade
 
-# Allow '.local' access
-sudo apt install -y libnss-mdns
+sudo apt-get install -y docker \
+    docker-compose \
+    libnss-mdns # Allow '.local' access
 
-sudo apt-get install -y docker docker-compose
 # Allow use of docker without sudo
 sudo usermod -aG docker harness
 
@@ -59,3 +60,12 @@ sudo sed -ir "s/^[#]*\s*HARNESS_ENV=.*/HARNESS_ENV=$INSTALL_TYPE/" /usr/local/bi
 sudo systemctl daemon-reload
 sudo systemctl enable harness-boot.service
 sudo systemctl start harness-boot.service
+
+echo "Updating hostname to API key"
+hostnamectl set-hostname $API_KEY
+
+echo "************************ INSTALL COMPLETE ************************"
+echo ""
+echo "Exit shell and login back in using ssh harness@${API_KEY}.local"
+echo ""
+echo "******************************************************************"
