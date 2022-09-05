@@ -62,7 +62,7 @@ sudo systemctl enable harness-boot.service
 sudo systemctl start harness-boot.service
 
 echo "Updating hostname to API key"
-hostnamectl set-hostname $API_KEY
+sudo hostnamectl set-hostname $API_KEY
 
 echo "************************ INSTALL COMPLETE ************************"
 echo ""
