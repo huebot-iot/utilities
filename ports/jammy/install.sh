@@ -63,9 +63,10 @@ sudo systemctl start harness-boot.service
 
 echo "Updating hostname to API key"
 sudo hostnamectl set-hostname $API_KEY
+sudo sed -i "s/127.0.1.1\s.*/127.0.1.1 ${$API_KEY}/g" /etc/hosts
 
 echo "************************ INSTALL COMPLETE ************************"
 echo ""
-echo "Exit shell and login back in using ssh harness@${API_KEY}.local"
+echo "Reboot device and login using: ssh harness@${API_KEY}.local"
 echo ""
 echo "******************************************************************"
