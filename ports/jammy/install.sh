@@ -63,7 +63,7 @@ sudo systemctl start harness-boot.service
 
 echo "Updating hostname to API key"
 sudo hostnamectl set-hostname $API_KEY
-sudo sed -i "s/127.0.1.1\s.*/127.0.1.1 ${$API_KEY}/g" /etc/hosts
+sudo sed -i "s/127.0.1.1\s.*/127.0.1.1 ${API_KEY}/g" /etc/hosts
 
 echo "************************ INSTALL COMPLETE ************************"
 echo ""
