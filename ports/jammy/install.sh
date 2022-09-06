@@ -12,6 +12,7 @@ sudo apt-get update && sudo apt-get -y upgrade
 
 sudo apt-get install -y docker \
     docker-compose \
+    network-manager \
     libnss-mdns # Allow '.local' access
 
 # Allow use of docker without sudo
