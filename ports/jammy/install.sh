@@ -69,7 +69,6 @@ sudo systemctl enable NetworkManager.service
 # disable netplan
 sudo rm /etc/netplan/*
 sudo cp "/home/harness/install/ports/$PORT/netplan-config.yaml" /etc/netplan/
-sudo netplan apply
 
 echo "Updating firewall policies"
 sudo ufw allow 22 #ssh
@@ -86,3 +85,6 @@ echo ""
 echo "Reboot device and login using: ssh harness@${API_KEY}.local"
 echo ""
 echo "******************************************************************"
+
+sudo netplan apply # this will interrupt session, save for last
+exit
