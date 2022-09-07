@@ -14,7 +14,6 @@ sudo apt-get install -y docker \
     docker-compose \
     network-manager \
     libnss-mdns \ # Allow '.local' access
-    network-manager
 
 # Allow use of docker without sudo
 sudo usermod -aG docker harness
