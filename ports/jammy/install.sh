@@ -13,7 +13,8 @@ sudo apt-get update && sudo apt-get -y upgrade
 sudo apt-get install -y docker \
     docker-compose \
     network-manager \
-    libnss-mdns # Allow '.local' access
+    libnss-mdns \ # Allow '.local' access
+    network-manager
 
 # Allow use of docker without sudo
 sudo usermod -aG docker harness
@@ -61,6 +62,10 @@ sudo sed -ir "s/^[#]*\s*HARNESS_ENV=.*/HARNESS_ENV=$INSTALL_TYPE/" /usr/local/bi
 sudo systemctl daemon-reload
 sudo systemctl enable harness-boot.service
 sudo systemctl start harness-boot.service
+
+# Start/enable network manager service
+sudo systemctl start NetworkManager.service 
+sudo systemctl enable NetworkManager.service
 
 echo "Updating hostname to API key"
 sudo hostnamectl set-hostname $API_KEY
