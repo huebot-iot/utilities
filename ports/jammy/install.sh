@@ -66,6 +66,12 @@ sudo systemctl start harness-boot.service
 sudo systemctl start NetworkManager.service 
 sudo systemctl enable NetworkManager.service
 
+echo "Updating firewall policies"
+sudo ufw allow 22 #ssh
+sudo ufw allow 80 
+sudo ufw allow 1883 #mqtt
+sudo ufw enable
+
 echo "Updating hostname to API key"
 sudo hostnamectl set-hostname $API_KEY
 sudo sed -i "s/127.0.1.1\s.*/127.0.1.1 ${API_KEY}/g" /etc/hosts
