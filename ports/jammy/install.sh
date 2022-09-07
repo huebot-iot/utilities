@@ -13,7 +13,7 @@ sudo apt-get update && sudo apt-get -y upgrade
 sudo apt-get install -y docker \
     docker-compose \
     network-manager \
-    libnss-mdns \ # Allow '.local' access
+    libnss-mdns # Allow '.local' access
 
 # Allow use of docker without sudo
 sudo usermod -aG docker harness
@@ -62,9 +62,14 @@ sudo systemctl daemon-reload
 sudo systemctl enable harness-boot.service
 sudo systemctl start harness-boot.service
 
+echo "Disabling Netplan, enabling Network Manager"
 # Start/enable network manager service
 sudo systemctl start NetworkManager.service 
 sudo systemctl enable NetworkManager.service
+# disable netplan
+sudo rm /etc/netplan/*
+sudo cp "/home/harness/install/ports/$PORT/netplan-config.yaml" /etc/netplan/
+sudo netplan apply
 
 echo "Updating firewall policies"
 sudo ufw allow 22 #ssh
