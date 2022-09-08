@@ -1,4 +1,7 @@
 #!/bin/bash
+
+hciconfig hci0 up
+
 if [ $HARNESS_ENV = "development" ]; then
    echo "Development environment. Starting docker-compose services"
    docker-compose -f /home/harness/install/docker-compose.lib.yml up -d
