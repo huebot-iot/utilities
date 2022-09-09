@@ -104,3 +104,4 @@ echo "Login using: ssh harness@${API_KEY}.local"
 echo ""
 echo "******************************************************************"
 
+sudo reboot
