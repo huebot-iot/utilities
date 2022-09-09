@@ -84,7 +84,7 @@ echo "Updating firewall policies"
 sudo ufw allow 22 #ssh
 sudo ufw allow 80 
 sudo ufw allow 1883 #mqtt
-sudo ufw enable
+sudo ufw --force enable
 
 echo "Updating hostname to API key"
 sudo hostnamectl set-hostname $API_KEY
