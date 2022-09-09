@@ -1,8 +1,9 @@
 #!/bin/bash
 
 API_KEY=$1
-PORT=$2
+SECRET_KEY=$2
 INSTALL_TYPE=$3
+PORT=$4
 
 # Disable interactive prompts
 sudo sed -i "/^#\$nrconf{restart} = 'i';/ c\$nrconf{restart} = 'a';" /etc/needrestart/needrestart.conf;
@@ -15,8 +16,8 @@ sudo apt-get install -y docker \
     network-manager \
     libnss-mdns # Allow '.local' access
 
-# Allow use of docker without sudo
-sudo usermod -aG docker harness
+# Set user group permissions
+sudo usermod -aG docker,netdev harness
 
 if [ $INSTALL_TYPE = "development" ]; then
     echo "Install extra packages for development"
@@ -50,6 +51,14 @@ if [ $INSTALL_TYPE = "development" ]; then
     sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
     sudo service bluetooth stop
     sudo systemctl disable bluetooth
+
+    # Set alias helpers
+    cat <<EOT >> ~/.bashrc
+alias run_api='cd ${HOME}/hub && npm run api:dev'
+alias run_controller='cd ${HOME}/hub && npm run controller:dev'
+alias run_broker='cd ${HOME}/hub && npm run broker:dev'
+EOT
+
 fi
 
 echo "Setting service and config files"
@@ -60,16 +69,16 @@ sudo cp "/home/harness/install/ports/$PORT/harness-boot.service" /etc/systemd/sy
 sudo sed -ir "s/^[#]*\s*HARNESS_ENV=.*/HARNESS_ENV=$INSTALL_TYPE/" /usr/local/bin/harness_env_vars
 sudo systemctl daemon-reload
 sudo systemctl enable harness-boot.service
-sudo systemctl start harness-boot.service
+# sudo systemctl start harness-boot.service
 
 echo "Disabling Netplan, enabling Network Manager"
 # Start/enable network manager service
-sudo systemctl start NetworkManager.service 
+# sudo systemctl start NetworkManager.service 
 sudo systemctl enable NetworkManager.service
 # disable netplan
 sudo rm /etc/netplan/*
 sudo cp "/home/harness/install/ports/$PORT/netplan-config.yaml" /etc/netplan/
-sudo netplan apply 
+# sudo netplan apply 
 
 echo "Updating firewall policies"
 sudo ufw allow 22 #ssh
@@ -81,9 +90,17 @@ echo "Updating hostname to API key"
 sudo hostnamectl set-hostname $API_KEY
 sudo sed -i "s/127.0.1.1\s.*/127.0.1.1 ${API_KEY}/g" /etc/hosts
 
+# Set environment variables
+cat <<EOT >> ~/.bashrc
+export HARNESS_API_KEY=${API_KEY}
+export HARNESS_SECRET_KEY=${SECRET_KEY}
+export OS_VERSION=${PORT}
+EOT
+
 echo "************************ INSTALL COMPLETE ************************"
 echo ""
-echo "Reboot device and login using: ssh harness@${API_KEY}.local"
+echo "Rebooting device"
+echo "Login using: ssh harness@${API_KEY}.local"
 echo ""
 echo "******************************************************************"
 
