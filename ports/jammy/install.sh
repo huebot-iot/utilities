@@ -19,6 +19,9 @@ sudo apt-get install -y docker \
 # Set user group permissions
 sudo usermod -aG docker,netdev harness
 
+# Make user sudoer (don't require pw for sudo commands)
+echo 'harness ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers.d/010_harness-nopasswd
+
 if [ $INSTALL_TYPE = "development" ]; then
     echo "Install extra packages for development"
 
