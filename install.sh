@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# API key
 API_KEY=$1
 SECRET_KEY=$2
+AP_INTERFACE=$3
 
 if [[ ! $API_KEY =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]]; then
   echo "Install failed. First arg must be API key (uuid)"
@@ -39,5 +39,5 @@ fi
 echo "OS ($PORT) verified. Starting $INSTALL_TYPE install..."
 
 # Run version-specific script
-bash "$DIR/install.sh" $API_KEY $SECRET_KEY $INSTALL_TYPE $PORT 
+bash "$DIR/install.sh" $API_KEY $SECRET_KEY $INSTALL_TYPE $AP_INTERFACE $PORT 
 

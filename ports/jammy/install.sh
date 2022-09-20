@@ -3,7 +3,8 @@
 API_KEY=$1
 SECRET_KEY=$2
 INSTALL_TYPE=$3
-PORT=$4
+AP_INTERFACE=$4
+PORT=$5
 
 # Disable interactive prompts
 sudo sed -i "/^#\$nrconf{restart} = 'i';/ c\$nrconf{restart} = 'a';" /etc/needrestart/needrestart.conf;
@@ -14,6 +15,7 @@ sudo apt-get update && sudo apt-get -y upgrade
 sudo apt-get install -y docker \
     docker-compose \
     network-manager \
+    isc-dhcp-server \
     libnss-mdns # Allow '.local' access
 
 # Set user group permissions
@@ -88,6 +90,16 @@ sudo ufw allow 22 #ssh
 sudo ufw allow 80 
 sudo ufw allow 1883 #mqtt
 sudo ufw --force enable
+
+echo "Setting up MQTT AP"
+sudo mv /etc/dhcp/dhcpd.conf{,.original}
+sudo cp "/home/harness/install/ports/$PORT/dhcpd.conf" /etc/dhcp/
+# Overwrite file
+cat <<EOT > /etc/default/isc-dhcp-server
+DHCPDv4_CONF=/etc/dhcp/dhcpd.conf
+INTERFACESv4="$AP_INTERFACE"
+INTERFACESv6=""
+EOT
 
 echo "Updating hostname to API key"
 sudo hostnamectl set-hostname $API_KEY
