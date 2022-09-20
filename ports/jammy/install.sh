@@ -93,7 +93,7 @@ sudo ufw --force enable
 
 echo "Setting up MQTT AP"
 sudo mv /etc/dhcp/dhcpd.conf{,.original}
-sudo cp "/home/harness/install/ports/$PORT/dhcpd.conf" /etc/dhcp/
+sudo cp "/home/harness/utilities/ports/$PORT/dhcpd.conf" /etc/dhcp/
 # Overwrite file
 cat <<EOT > /etc/default/isc-dhcp-server
 DHCPDv4_CONF=/etc/dhcp/dhcpd.conf
