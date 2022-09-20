@@ -29,7 +29,7 @@ cd /home/harness
 # Clone repo if it doesn't exist locally or pull to update
 git clone https://github.com/harness-iot/utilities.git 2> /dev/null || git -C install pull
 
-DIR="/home/harness/install/ports/$PORT"
+DIR="/home/harness/utilities/ports/$PORT"
 
 if [ ! -d $DIR ]; then
   echo "Install failed. OS version ($PORT) not supported"
