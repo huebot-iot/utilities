@@ -67,9 +67,9 @@ EOT
 fi
 
 echo "Setting service and config files"
-sudo cp "/home/harness/install/ports/$PORT/harness-boot.sh" /usr/local/bin/
-sudo cp "/home/harness/install/ports/$PORT/harness_env_vars" /usr/local/bin/
-sudo cp "/home/harness/install/ports/$PORT/harness-boot.service" /etc/systemd/system/
+sudo cp "/home/harness/utilities/ports/$PORT/harness-boot.sh" /usr/local/bin/
+sudo cp "/home/harness/utilities/ports/$PORT/harness_env_vars" /usr/local/bin/
+sudo cp "/home/harness/utilities/ports/$PORT/harness-boot.service" /etc/systemd/system/
 # Set system environment
 sudo sed -ir "s/^[#]*\s*HARNESS_ENV=.*/HARNESS_ENV=$INSTALL_TYPE/" /usr/local/bin/harness_env_vars
 sudo systemctl daemon-reload
@@ -82,7 +82,7 @@ echo "Disabling Netplan, enabling Network Manager"
 sudo systemctl enable NetworkManager.service
 # disable netplan
 sudo rm /etc/netplan/*
-sudo cp "/home/harness/install/ports/$PORT/netplan-config.yaml" /etc/netplan/
+sudo cp "/home/harness/utilities/ports/$PORT/netplan-config.yaml" /etc/netplan/
 # sudo netplan apply 
 
 echo "Updating firewall policies"
