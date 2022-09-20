@@ -1,1 +1,1 @@
-## Harness tools/scrips
+## Harness tools/scripts
