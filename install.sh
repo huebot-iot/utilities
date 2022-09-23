@@ -2,7 +2,8 @@
 
 API_KEY=$1
 SECRET_KEY=$2
-AP_INTERFACE=$3
+INSTALL_TYPE=${3:-production} # development | production (defaults to production)
+AP_INTERFACE=$4
 
 if [[ ! $API_KEY =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$ ]]; then
   echo "Install failed. First arg must be API key (uuid)"
@@ -13,9 +14,6 @@ if [[ ! $SECRET_KEY =~ ^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a
   echo "Install failed. Second arg must be secret key (uuid)"
   exit 1;
 fi
-
-# development | production (defaults to production)
-INSTALL_TYPE=${3:-production}
 
 PORT=$(cat /etc/os-release | grep -oP '(^|[ ,])VERSION_CODENAME=\K[^,]*')
 
