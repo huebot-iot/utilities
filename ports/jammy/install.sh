@@ -94,7 +94,8 @@ sudo ufw --force enable
 echo "Setting up MQTT AP"
 sudo mv /etc/dhcp/dhcpd.conf{,.original}
 sudo cp "/home/harness/utilities/ports/$PORT/dhcpd.conf" /etc/dhcp/
-# Overwrite file
+# Overwrite file (remove, re-add with red'd content)
+sudo rm /etc/default/isc-dhcp-server
 cat <<EOT | sudo tee -a /etc/default/isc-dhcp-server
 DHCPDv4_CONF=/etc/dhcp/dhcpd.conf
 INTERFACESv4="${AP_INTERFACE}"
