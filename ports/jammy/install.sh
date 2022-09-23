@@ -95,9 +95,11 @@ echo "Setting up MQTT AP"
 sudo mv /etc/dhcp/dhcpd.conf{,.original}
 sudo cp "/home/harness/utilities/ports/$PORT/dhcpd.conf" /etc/dhcp/
 # Overwrite file
+echo "INTEFACE!"
+echo $AP_INTERFACE
 sudo bash -c 'cat <<EOT > /etc/default/isc-dhcp-server
 DHCPDv4_CONF=/etc/dhcp/dhcpd.conf
-INTERFACESv4="$AP_INTERFACE"
+INTERFACESv4="${AP_INTERFACE}"
 INTERFACESv6=""
 EOT'
 
