@@ -95,11 +95,11 @@ echo "Setting up MQTT AP"
 sudo mv /etc/dhcp/dhcpd.conf{,.original}
 sudo cp "/home/harness/utilities/ports/$PORT/dhcpd.conf" /etc/dhcp/
 # Overwrite file
-sudo bash -c 'cat <<EOT > /etc/default/isc-dhcp-server
+cat <<EOT | sudo tee -a /etc/default/isc-dhcp-server
 DHCPDv4_CONF=/etc/dhcp/dhcpd.conf
-INTERFACESv4=$AP_INTERFACE
+INTERFACESv4="${AP_INTERFACE}"
 INTERFACESv6=""
-EOT'
+EOT
 
 echo "Updating hostname to API key"
 sudo hostnamectl set-hostname $API_KEY
