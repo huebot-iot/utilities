@@ -15,7 +15,7 @@ sudo apt-get update && sudo apt-get -y upgrade
 sudo apt-get install -y docker \
     docker-compose \
     network-manager \
-    isc-dhcp-server \
+    dnsmasq \
     libnss-mdns # Allow '.local' access
 
 # Set user group permissions
@@ -89,17 +89,18 @@ echo "Updating firewall policies"
 sudo ufw allow 22 #ssh
 sudo ufw allow 80 
 sudo ufw allow 1883 #mqtt
+sudo ufw allow in on $AP_INTERFACE # AP
 sudo ufw --force enable
 
 echo "Setting up MQTT AP"
-sudo mv /etc/dhcp/dhcpd.conf{,.original}
-sudo cp "/home/harness/utilities/ports/$PORT/dhcpd.conf" /etc/dhcp/
-# Overwrite file (remove, re-add with red'd content)
-sudo rm /etc/default/isc-dhcp-server
-cat <<EOT | sudo tee -a /etc/default/isc-dhcp-server
-DHCPDv4_CONF=/etc/dhcp/dhcpd.conf
-INTERFACESv4="${AP_INTERFACE}"
-INTERFACESv6=""
+cat <<EOT | sudo tee -a /etc/NetworkManager/conf.d/00-use-dnsmasq.conf
+[main]
+dns=dnsmasq
+EOT
+
+cat <<EOT | sudo tee -a /etc/NetworkManager/dnsmasq.d/00-dnsmasq-config.conf
+interface=$AP_INTERFACE
+dhcp-range=192.168.4.2,192.168.4.250,255.255.255.0,24h
 EOT
 
 echo "Updating hostname to API key"
