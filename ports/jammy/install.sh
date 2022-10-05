@@ -12,6 +12,12 @@ sudo sed -i "/^#\$nrconf{restart} = 'i';/ c\$nrconf{restart} = 'a';" /etc/needre
 echo "Installing required packages. This could take a while.."
 sudo apt-get update && sudo apt-get -y upgrade
 
+sudo apt-get install -y docker \
+    docker-compose \
+    network-manager \
+    dnsmasq \
+    libnss-mdns # Allow '.local' access
+    
 # Downgrade wpa_supplicant - latest version has NM hotspot bug
 # https://askubuntu.com/questions/1406149/cant-connect-to-ubuntu-22-04-hotspot
 cat <<EOT | sudo tee -a /etc/apt/sources.list
@@ -20,12 +26,6 @@ deb http://old-releases.ubuntu.com/ubuntu/ impish-updates main restricted univer
 deb http://old-releases.ubuntu.com/ubuntu/ impish-security main restricted universe multiverse
 EOT
 sudo apt-get --allow-downgrades install wpasupplicant=2:2.9.0-21build1
-
-sudo apt-get install -y docker \
-    docker-compose \
-    network-manager \
-    dnsmasq \
-    libnss-mdns # Allow '.local' access
 
 # Set user group permissions
 sudo usermod -aG docker,netdev harness
