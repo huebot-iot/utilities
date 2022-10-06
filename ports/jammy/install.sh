@@ -25,7 +25,7 @@ deb http://old-releases.ubuntu.com/ubuntu/ impish main restricted universe multi
 deb http://old-releases.ubuntu.com/ubuntu/ impish-updates main restricted universe multiverse
 deb http://old-releases.ubuntu.com/ubuntu/ impish-security main restricted universe multiverse
 EOT
-sudo apt-get --allow-downgrades install wpasupplicant=2:2.9.0-21build1
+sudo apt-get --allow-downgrades install -y wpasupplicant=2:2.9.0-21build1
 
 # Set user group permissions
 sudo usermod -aG docker,netdev harness
