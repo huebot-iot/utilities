@@ -109,12 +109,18 @@ EOT
 
 cat <<EOT | sudo tee -a /etc/NetworkManager/dnsmasq.d/00-dnsmasq-config.conf
 interface=$AP_INTERFACE
-dhcp-range=192.168.4.2,192.168.4.250,255.255.255.0,24h
+dhcp-range=192.168.101.2,192.168.101.250,255.255.255.0,24h
+local=/huebot/
 EOT
 
 echo "Updating hostname to API key"
 sudo hostnamectl set-hostname $API_KEY
 sudo sed -i "s/127.0.1.1\s.*/127.0.1.1 ${API_KEY}/g" /etc/hosts
+
+# Setup server dns
+cat <<EOT | sudo tee -a /etc/hosts
+192.168.101.1 hub.huebot
+EOT
 
 # Set environment variables
 cat <<EOT >> ~/.bashrc
