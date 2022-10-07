@@ -17,15 +17,6 @@ sudo apt-get install -y docker \
     network-manager \
     dnsmasq \
     libnss-mdns # Allow '.local' access
-    
-# Downgrade wpa_supplicant - latest version has NM hotspot bug
-# https://askubuntu.com/questions/1406149/cant-connect-to-ubuntu-22-04-hotspot
-cat <<EOT | sudo tee -a /etc/apt/sources.list
-deb http://old-releases.ubuntu.com/ubuntu/ impish main restricted universe multiverse
-deb http://old-releases.ubuntu.com/ubuntu/ impish-updates main restricted universe multiverse
-deb http://old-releases.ubuntu.com/ubuntu/ impish-security main restricted universe multiverse
-EOT
-sudo apt-get --allow-downgrades install -y wpasupplicant=2:2.9.0-21build1
 
 # Set user group permissions
 sudo usermod -aG docker,netdev harness
@@ -74,6 +65,15 @@ alias run_broker='cd ${HOME}/hub && npm run broker:dev'
 EOT
 
 fi
+
+# Downgrade wpa_supplicant - latest version has NM hotspot bug
+# https://askubuntu.com/questions/1406149/cant-connect-to-ubuntu-22-04-hotspot
+cat <<EOT | sudo tee -a /etc/apt/sources.list
+deb http://old-releases.ubuntu.com/ubuntu/ impish main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ impish-updates main restricted universe multiverse
+deb http://old-releases.ubuntu.com/ubuntu/ impish-security main restricted universe multiverse
+EOT
+sudo apt-get --allow-downgrades install -y wpasupplicant=2:2.9.0-21build1
 
 echo "Setting service and config files"
 sudo cp "/home/harness/utilities/ports/$PORT/harness-boot.sh" /usr/local/bin/
