@@ -5,6 +5,7 @@ SECRET_KEY=$2
 INSTALL_TYPE=$3
 AP_INTERFACE=$4
 PORT=$5
+NETWORK_NODE_AP_IP=192.168.101.1
 
 # Disable interactive prompts
 sudo sed -i "/^#\$nrconf{restart} = 'i';/ c\$nrconf{restart} = 'a';" /etc/needrestart/needrestart.conf;
@@ -120,7 +121,7 @@ sudo sed -i "s/127.0.1.1\s.*/127.0.1.1 ${API_KEY}/g" /etc/hosts
 
 # Setup server dns
 cat <<EOT | sudo tee -a /etc/hosts
-192.168.101.1 hub.huebot
+$NETWORK_NODE_AP_IP hub.huebot
 EOT
 
 # Set environment variables
@@ -128,6 +129,7 @@ cat <<EOT >> ~/.bashrc
 export HARNESS_API_KEY=${API_KEY}
 export HARNESS_SECRET_KEY=${SECRET_KEY}
 export OS_VERSION=${PORT}
+export NETWORK_NODE_AP_IP=${NETWORK_NODE_AP_IP}
 EOT
 
 echo "************************ INSTALL COMPLETE ************************"
