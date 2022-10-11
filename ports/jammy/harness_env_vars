@@ -1,1 +1,2 @@
+OS_VERSION="jammy"
 HARNESS_ENV="production"
