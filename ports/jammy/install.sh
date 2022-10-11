@@ -79,13 +79,15 @@ sudo apt --allow-downgrades install -y wpasupplicant=2:2.9.0-21build1
 
 echo "Setting service and config files"
 sudo cp "/home/harness/utilities/ports/$PORT/harness-boot.sh" /usr/local/bin/
-sudo cp "/home/harness/utilities/ports/$PORT/harness_env_vars" /usr/local/bin/
 sudo cp "/home/harness/utilities/ports/$PORT/harness-boot.service" /etc/systemd/system/
-# Set system environment
-sudo sed -ir "s/^[#]*\s*HARNESS_ENV=.*/HARNESS_ENV=$INSTALL_TYPE/" /usr/local/bin/harness_env_vars
-sudo systemctl daemon-reload
 sudo systemctl enable harness-boot.service
-# sudo systemctl start harness-boot.service
+
+# Set systemd environment vars
+cat <<EOT | sudo tee -a /usr/local/bin/harness_env_vars
+HARNESS_ENV=$INSTALL_TYPE
+MQTT_USERNAME=huebot_mqtt
+MQTT_PASSWORD=$(openssl rand -base64 10)
+EOT
 
 echo "Disabling Netplan, enabling Network Manager"
 # Start/enable network manager service
@@ -130,6 +132,10 @@ export HARNESS_API_KEY=${API_KEY}
 export HARNESS_SECRET_KEY=${SECRET_KEY}
 export OS_VERSION=${PORT}
 export NETWORK_NODE_AP_IP=${NETWORK_NODE_AP_IP}
+# Systemd vars that need to be env vars
+source /usr/local/bin/harness_env_vars
+export MQTT_USERNAME
+export MQTT_PASSWORD
 EOT
 
 echo "************************ INSTALL COMPLETE ************************"
