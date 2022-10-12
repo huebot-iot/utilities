@@ -7,11 +7,15 @@ services:
     restart: always
     ports:
       - "6379:6379"
+
   nginx:
     image: ghcr.io/harness-iot/nginx:latest
     container_name: harness_nginx
     restart: always
-    network_mode: "host"
+    ports:
+      - "80:80"
+      - "1883:1883"
+
   mqtt:
     image: ghcr.io/harness-iot/mqtt:latest
     container_name: harness_mqtt
@@ -21,5 +25,3 @@ services:
       - /usr/local/bin/mosquitto/passwd:/etc/mosquitto/passwd
       - /usr/local/bin/mosquitto/data:/mosquitto/data
       - /usr/local/bin/mosquitto/log:/mosquitto/log
-    ports:
-      - "18831:1883"
