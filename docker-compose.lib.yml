@@ -17,8 +17,9 @@ services:
     container_name: harness_mqtt
     restart: always
     volumes:
+      - /usr/local/bin/mosquitto/conf.d:/mosquitto/config/conf.d
       - /usr/local/bin/mosquitto/passwd:/etc/mosquitto/passwd
       - /usr/local/bin/mosquitto/data:/mosquitto/data
-      - /var/log/mosquitto/mosquitto.log:/mosquitto/log/mosquitto.log
+      - /usr/local/bin/mosquitto/log:/mosquitto/log
     ports:
       - "18831:1883"

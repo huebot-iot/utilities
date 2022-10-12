@@ -28,15 +28,14 @@ sudo usermod -aG docker,netdev harness
 # Make user sudoer (don't require pw for sudo commands)
 echo 'harness ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers.d/010_harness-nopasswd
 
-# Create Mosquitto conf file (development will alter logging type)
-cat <<EOT | sudo tee -a /usr/local/bin/mosquitto/mosquitto.conf
-persistence true
-persistence_location /mosquitto/data/
-log_dest file /mosquitto/log/mosquitto.log
-
-allow_anonymous false
-password_file /etc/mosquitto/passwd
-EOT
+# Preemptively create local mosquitto volumes so we can grant permissions (persistence wont work otherwise)
+# Note: we grant permissions to port 1883 as it is used within the container
+# Note 2: If we move to spawning multiple mqtt brokers we'd need to rethink persisence so they don't 
+# override eachother
+sudo mkdir /usr/local/bin/mosquitto/data
+sudo chown -R 1883:1883 data
+sudo mkdi /usr/local/bin/mosquitto/log
+sudo chown -R 1883:1883 log
 
 if [ $INSTALL_TYPE = "development" ]; then
     echo "Install extra packages for development"
@@ -78,7 +77,7 @@ alias run_controller='cd ${HOME}/hub && npm run controller:dev'
 EOT
 
     # Enable full mosquitto logging in dev mode
-    cat <<EOT >> /usr/local/bin/mosquitto/mosquitto.conf
+    cat <<EOT | sudo tee -a /usr/local/bin/mosquitto/conf.d/default.conf
 log_type all
 EOT
 
