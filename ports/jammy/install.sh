@@ -5,7 +5,10 @@ SECRET_KEY=$2
 INSTALL_TYPE=$3
 AP_INTERFACE=$4
 PORT=$5
+
 NETWORK_NODE_AP_IP=192.168.101.1
+MQTT_USERNAME=huebot_mqtt
+MQTT_PASSWORD=$(openssl rand -base64 10)
 
 # Disable interactive prompts
 sudo sed -i "/^#\$nrconf{restart} = 'i';/ c\$nrconf{restart} = 'a';" /etc/needrestart/needrestart.conf;
@@ -24,6 +27,16 @@ sudo usermod -aG docker,netdev harness
 
 # Make user sudoer (don't require pw for sudo commands)
 echo 'harness ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers.d/010_harness-nopasswd
+
+# Create Mosquitto conf file (development will alter logging type)
+cat <<EOT | sudo tee -a /usr/local/bin/mosquitto/mosquitto.conf
+persistence true
+persistence_location /mosquitto/data/
+log_dest file /mosquitto/log/mosquitto.log
+
+allow_anonymous false
+password_file /etc/mosquitto/passwd
+EOT
 
 if [ $INSTALL_TYPE = "development" ]; then
     echo "Install extra packages for development"
@@ -62,7 +75,11 @@ if [ $INSTALL_TYPE = "development" ]; then
     cat <<EOT >> ~/.bashrc
 alias run_api='cd ${HOME}/hub && npm run api:dev'
 alias run_controller='cd ${HOME}/hub && npm run controller:dev'
-alias run_broker='cd ${HOME}/hub && npm run broker:dev'
+EOT
+
+    # Enable full mosquitto logging in dev mode
+    cat <<EOT >> /usr/local/bin/mosquitto/mosquitto.conf
+log_type all
 EOT
 
 fi
@@ -85,8 +102,6 @@ sudo systemctl enable harness-boot.service
 # Set systemd environment vars
 cat <<EOT | sudo tee -a /usr/local/bin/harness_env_vars
 HARNESS_ENV=$INSTALL_TYPE
-MQTT_USERNAME=huebot_mqtt
-MQTT_PASSWORD=$(openssl rand -base64 10)
 EOT
 
 echo "Disabling Netplan, enabling Network Manager"
@@ -132,10 +147,8 @@ export HARNESS_API_KEY=${API_KEY}
 export HARNESS_SECRET_KEY=${SECRET_KEY}
 export OS_VERSION=${PORT}
 export NETWORK_NODE_AP_IP=${NETWORK_NODE_AP_IP}
-# Systemd vars that need to be env vars
-source /usr/local/bin/harness_env_vars
-export MQTT_USERNAME
-export MQTT_PASSWORD
+export MQTT_USERNAME=${MQTT_USERNAME}
+export MQTT_PASSWORD=${MQTT_PASSWORD}
 EOT
 
 echo "************************ INSTALL COMPLETE ************************"
