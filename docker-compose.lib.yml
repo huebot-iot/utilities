@@ -3,22 +3,22 @@ version: "3.9"
 services:
   redis:
     image: redis:6.2-alpine
-    container_name: harness_redis
+    container_name: huebot_redis
     restart: always
     ports:
       - "6379:6379"
 
   nginx:
-    image: ghcr.io/harness-iot/nginx:latest
-    container_name: harness_nginx
+    image: ghcr.io/huebot-iot/nginx:latest
+    container_name: huebot_nginx
     restart: always
     ports:
       - "80:80"
       - "1883:1883"
 
   mqtt:
-    image: ghcr.io/harness-iot/mqtt:latest
-    container_name: harness_mqtt
+    image: ghcr.io/huebot-iot/mqtt:latest
+    container_name: huebot_mqtt
     restart: always
     volumes:
       - /usr/local/bin/mosquitto/conf.d:/mosquitto/config/conf.d
