@@ -12,9 +12,6 @@ services:
     image: ghcr.io/huebot-iot/nginx:latest
     container_name: huebot_nginx
     restart: always
-    ports:
-      - "80:80"
-      - "1883:1883"
     network_mode: "host"
 
   mqtt:
