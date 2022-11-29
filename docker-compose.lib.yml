@@ -15,6 +15,7 @@ services:
     ports:
       - "80:80"
       - "1883:1883"
+    network_mode: "host"
 
   mqtt:
     image: ghcr.io/huebot-iot/mqtt:latest
