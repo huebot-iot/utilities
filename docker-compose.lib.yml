@@ -1,4 +1,5 @@
 # Lib services required in development and production env
+# Services that cannot be updated by end user
 version: "3.9"
 services:
   redis:
@@ -7,6 +8,8 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    networks:
+      - huebot-net
 
   nginx:
     image: ghcr.io/huebot-iot/nginx:latest
@@ -23,3 +26,8 @@ services:
       - /usr/local/bin/mosquitto/passwd:/etc/mosquitto/passwd
       - /usr/local/bin/mosquitto/data:/mosquitto/data
       - /usr/local/bin/mosquitto/log:/mosquitto/log
+
+networks:
+  huebot-net:
+    name: hubNetwork
+    driver: bridge
