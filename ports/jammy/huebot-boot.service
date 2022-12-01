@@ -1,0 +1,9 @@
+[Unit]
+Description=Handles running Huebot depending on environment
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/huebot-boot.sh
+
+[Install]
+WantedBy=default.target

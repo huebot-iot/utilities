@@ -22,12 +22,12 @@ if [ -z "$PORT" ]; then
   exit 1;
 fi
 
-cd /home/harness
+cd /home/huebot
 
 # Clone repo if it doesn't exist locally or pull to update
-git clone https://github.com/harness-iot/utilities.git 2> /dev/null || git -C install pull
+git clone https://github.com/huebot-iot/utilities.git 2> /dev/null || git -C install pull
 
-DIR="/home/harness/utilities/ports/$PORT"
+DIR="/home/huebot/utilities/ports/$PORT"
 
 if [ ! -d $DIR ]; then
   echo "Install failed. OS version ($PORT) not supported"

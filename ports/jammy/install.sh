@@ -20,13 +20,14 @@ sudo apt-get install -y docker \
     docker-compose \
     network-manager \
     dnsmasq \
+    jq \ # *.json parsing in bash
     libnss-mdns # Allow '.local' access
 
 # Set user group permissions
-sudo usermod -aG docker,netdev harness
+sudo usermod -aG docker,netdev huebot
 
 # Make user sudoer (don't require pw for sudo commands)
-echo 'harness ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers.d/010_harness-nopasswd
+echo 'huebot ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers.d/010_huebot-nopasswd
 
 # Preemptively create local mosquitto volumes so we can grant permissions (persistence wont work otherwise)
 # Note: we grant permissions to port 1883 as it is used within the container
@@ -94,13 +95,16 @@ sudo apt update
 sudo apt --allow-downgrades install -y wpasupplicant=2:2.9.0-21build1
 
 echo "Setting service and config files"
-sudo cp "/home/harness/utilities/ports/$PORT/harness-boot.sh" /usr/local/bin/
-sudo cp "/home/harness/utilities/ports/$PORT/harness-boot.service" /etc/systemd/system/
-sudo systemctl enable harness-boot.service
+sudo cp "/home/huebot/utilities/ports/$PORT/huebot-boot.sh" /usr/local/bin/
+sudo cp "/home/huebot/utilities/ports/$PORT/huebot-boot.service" /etc/systemd/system/
+sudo systemctl enable huebot-boot.service
 
-# Set systemd environment vars
-cat <<EOT | sudo tee -a /usr/local/bin/harness_env_vars
-HARNESS_ENV=$INSTALL_TYPE
+# Vars that determine hub run environment
+cat <<EOT | sudo tee -a /usr/local/bin/config.json
+{
+    "status": "normal",
+    "environment": "$INSTALL_TYPE"
+}
 EOT
 
 echo "Disabling Netplan, enabling Network Manager"
@@ -109,7 +113,7 @@ echo "Disabling Netplan, enabling Network Manager"
 sudo systemctl enable NetworkManager.service
 # disable netplan
 sudo rm /etc/netplan/*
-sudo cp "/home/harness/utilities/ports/$PORT/netplan-config.yaml" /etc/netplan/
+sudo cp "/home/huebot/utilities/ports/$PORT/netplan-config.yaml" /etc/netplan/
 # sudo netplan apply 
 
 echo "Updating firewall policies"
@@ -142,8 +146,8 @@ EOT
 
 # Set environment variables
 cat <<EOT >> ~/.bashrc
-export HARNESS_API_KEY=${API_KEY}
-export HARNESS_SECRET_KEY=${SECRET_KEY}
+export HUEBOT_API_KEY=${API_KEY}
+export HUEBOT_SECRET_KEY=${SECRET_KEY}
 export OS_VERSION=${PORT}
 export NETWORK_NODE_AP_IP=${NETWORK_NODE_AP_IP}
 export MQTT_USERNAME=${MQTT_USERNAME}
@@ -153,7 +157,7 @@ EOT
 echo "************************ INSTALL COMPLETE ************************"
 echo ""
 echo "Rebooting device"
-echo "Login using: ssh harness@${API_KEY}.local"
+echo "Login using: ssh huebot@${API_KEY}.local"
 echo ""
 echo "******************************************************************"
 

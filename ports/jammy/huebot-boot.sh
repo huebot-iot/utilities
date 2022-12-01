@@ -8,7 +8,7 @@ echo "Running $ENVIRONMENT environment"
 
 # Always start up lib services
 echo "Starting lib packages"
-docker-compose -f /home/harness/utilities/docker-compose.lib.yml up -d
+docker-compose -f /home/huebot/utilities/docker-compose.lib.yml up -d
 
 if [ $ENVIRONMENT = "\""development"\"" ]; then
    echo "do nothing"
@@ -18,5 +18,5 @@ elif [ $ENVIRONMENT = "\""production"\"" ]; then
       echo "TO DO: Handle mid progress update"
    else
       echo "Starting production core packages"
-      docker-compose -f /home/harness/utilities/docker-compose.core.yml up -d
+      docker-compose -f /home/huebot/utilities/docker-compose.core.yml up -d
 fi
