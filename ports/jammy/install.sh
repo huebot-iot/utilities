@@ -65,18 +65,6 @@ if [ $INSTALL_TYPE = "development" ]; then
     echo "export PATH=~/.npm-global/bin:$PATH" >> ~/.profile
     source ~/.profile
 
-    # Required for Bleno
-    sudo npm install -g node-gyp
-    sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
-    sudo service bluetooth stop
-    sudo systemctl disable bluetooth
-
-    # Set alias helpers
-    cat <<EOT >> ~/.bashrc
-alias run_api='cd ${HOME}/hub && npm run api:dev'
-alias run_controller='cd ${HOME}/hub && npm run controller:dev'
-EOT
-
     # Enable full mosquitto logging in dev mode
     cat <<EOT | sudo tee -a /usr/local/bin/mosquitto/conf.d/default.conf
 log_type all
