@@ -19,4 +19,5 @@ elif [ $ENVIRONMENT = "\""production"\"" ]; then
    else
       echo "Starting production core packages"
       docker-compose -f /home/huebot/utilities/docker-compose.core.yml up -d
+   fi
 fi
