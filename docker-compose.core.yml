@@ -1,22 +1,13 @@
 version: "3.9"
 services:
   api:
-    image: ghcr.io/tilersmyth/api:latest
-    network_mode: "host"
-    environment:
-      - BASE_DIR=/hub
-    volumes:
-      - ../db:/db
-    command: sh -c "npm run typeorm:prod migration:run && npm run start:prod"
-  mqtt_broker:
-    image: ghcr.io/tilersmyth/mqtt-broker:latest
-    network_mode: "host"
-    command: sh -c "npm run start:prod"
-  controller:
-    image: ghcr.io/tilersmyth/controller:latest
-    network_mode: "host"
-    environment:
-      - BASE_DIR=/hub
-    volumes:
-      - ../db:/db
-    command: sh -c "npm run start:prod"
+    image: ghcr.io/huebot-iot/hub-core-next:latest
+    ports:
+      - 3000:3000
+    networks:
+      - huebot-proxy-net
+
+networks:
+  huebot-proxy-net:
+    external:
+      name: hubNetwork

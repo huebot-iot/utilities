@@ -7,6 +7,7 @@ ENVIRONMENT=$(jq .environment /usr/local/bin/config.json)
 echo "Running $ENVIRONMENT environment"
 
 # Always start up lib services
+echo "Starting lib packages"
 docker-compose -f /home/harness/utilities/docker-compose.lib.yml up -d
 
 if [ $ENVIRONMENT = "\""development"\"" ]; then
@@ -16,5 +17,6 @@ elif [ $ENVIRONMENT = "\""production"\"" ]; then
    if [ $STATUS = "\""update"\"" ]; then
       echo "TO DO: Handle mid progress update"
    else
-      echo "TO DO: Run docker-compose core"
+      echo "Starting production core packages"
+      docker-compose -f /home/harness/utilities/docker-compose.core.yml up -d
 fi
