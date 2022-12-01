@@ -20,7 +20,7 @@ sudo apt-get install -y docker \
     docker-compose \
     network-manager \
     dnsmasq \
-    jq \ # *.json parsing in bash
+    jq \
     libnss-mdns # Allow '.local' access
 
 # Set user group permissions
