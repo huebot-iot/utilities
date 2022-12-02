@@ -35,7 +35,7 @@ echo 'huebot ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers.d/010_huebot
 # override eachother
 sudo mkdir /usr/local/bin/mosquitto/data
 sudo chown -R 1883:1883 data
-sudo mkdi /usr/local/bin/mosquitto/log
+sudo mkdir /usr/local/bin/mosquitto/log
 sudo chown -R 1883:1883 log
 
 if [ $INSTALL_TYPE = "development" ]; then
@@ -111,7 +111,7 @@ sudo ufw allow 1883 #mqtt
 sudo ufw allow in on $AP_INTERFACE # AP
 sudo ufw --force enable
 
-echo "Setting up MQTT AP"
+echo "Setting up MQTT"
 cat <<EOT | sudo tee -a /etc/NetworkManager/conf.d/00-use-dnsmasq.conf
 [main]
 dns=dnsmasq
@@ -130,6 +130,12 @@ sudo sed -i "s/127.0.1.1\s.*/127.0.1.1 ${API_KEY}/g" /etc/hosts
 # Setup server dns
 cat <<EOT | sudo tee -a /etc/hosts
 $NETWORK_NODE_AP_IP hub.huebot
+EOT
+
+# create mqtt password file
+# Note: the password will get encrypted once mosquitto docker service is spun up (file is shared volume)
+cat <<EOT | sudo tee -a /usr/local/bin/mosquitto/passwd
+${MQTT_USERNAME}:${MQTT_PASSWORD}
 EOT
 
 # Set environment variables
