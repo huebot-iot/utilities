@@ -70,6 +70,11 @@ if [ $INSTALL_TYPE = "development" ]; then
 log_type all
 EOT
 
+
+    # Make db dir so huebot user has permission access
+    # Otherwise it will be created from docker dev container which will cause permission issues
+    mkdir "/home/huebot/db"
+
 fi
 
 # Downgrade wpa_supplicant - latest version has NM hotspot bug
