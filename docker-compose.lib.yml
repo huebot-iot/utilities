@@ -17,7 +17,7 @@ services:
     restart: always
     network_mode: "host"
 
-  mqtt:
+  mqtt_broker:
     image: ghcr.io/huebot-iot/mqtt:latest
     container_name: huebot_mqtt
     restart: always
@@ -26,6 +26,8 @@ services:
       - /usr/local/bin/mosquitto/passwd:/etc/mosquitto/passwd
       - /usr/local/bin/mosquitto/data:/mosquitto/data
       - /usr/local/bin/mosquitto/log:/mosquitto/log
+    networks:
+      - huebot-net
 
 networks:
   huebot-net:
