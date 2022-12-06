@@ -19,7 +19,7 @@ services:
 
   mqtt_broker:
     image: ghcr.io/huebot-iot/mqtt:latest
-    container_name: huebot_mqtt
+    container_name: huebot_mqtt_broker
     restart: always
     volumes:
       - /usr/local/bin/mosquitto/conf.d:/mosquitto/config/conf.d
