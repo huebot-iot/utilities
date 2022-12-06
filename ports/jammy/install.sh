@@ -54,7 +54,6 @@ if [ $INSTALL_TYPE = "development" ]; then
         libudev-dev \
         libusb-1.0-0-dev \
         nodejs \
-        sqlite3 \
         build-essential \
         python3.8 \
         python3-pip
