@@ -26,9 +26,6 @@ sudo apt-get install -y docker \
 # Set user group permissions
 sudo usermod -aG docker,netdev huebot
 
-# Make user sudoer (don't require pw for sudo commands)
-echo 'huebot ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers.d/010_huebot-nopasswd
-
 # Preemptively create local mosquitto volumes so we can grant permissions (persistence wont work otherwise)
 # Note: we grant permissions to port 1883 as it is used within the container
 # Note 2: If we move to spawning multiple mqtt brokers we'd need to rethink persisence so they don't 
