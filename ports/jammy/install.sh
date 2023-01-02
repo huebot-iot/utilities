@@ -44,6 +44,10 @@ if [ $INSTALL_TYPE = "development" ]; then
         sudo apt-get update
 
     curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash
+    
+    # Need to revisit when install next - need to delete bluez, but also wondering
+    # if all packages can be deleted (including node) because we are developing
+    # inside docker containers
     sudo apt-get install -yq software-properties-common \
         bluetooth \
         bluez \
@@ -73,7 +77,7 @@ EOT
 
 fi
 
-# Downgrade wpa_supplicant - latest version has NM hotspot bug
+# Downgrade wpa_supplicant - latest version (2.10) has NM hotspot bug
 # https://askubuntu.com/questions/1406149/cant-connect-to-ubuntu-22-04-hotspot
 cat <<EOT | sudo tee -a /etc/apt/sources.list
 deb http://old-releases.ubuntu.com/ubuntu/ impish main restricted universe multiverse
