@@ -96,7 +96,9 @@ sudo systemctl enable huebot-boot.service
 cat <<EOT | sudo tee -a /usr/local/bin/config.json
 {
     "status": "normal",
-    "environment": "$INSTALL_TYPE"
+    "environment": "$INSTALL_TYPE",
+    "mqtt_username": "",
+    "mqtt_password": ""
 }
 EOT
 
