@@ -26,6 +26,8 @@ services:
       - /usr/local/bin/mosquitto/passwd:/etc/mosquitto/passwd
       - /usr/local/bin/mosquitto/data:/mosquitto/data
       - /usr/local/bin/mosquitto/log:/mosquitto/log
+    ports:
+      - 18831:1883
     networks:
       - huebot-net
 
